@@ -81,7 +81,7 @@ Build a **Python-based headless application** that:
 * For each topic, builds a prompt using its keywords.
 * Calls OpenAI to get a summary of the latest developments.
 * Calls OpenAI to compare the received summary with existing in mongodb
-  * prompt: "Compare the following two texts separated with character '|' and compute similarity score for them ranging from 0, as not similar at all to 1 exactly the same."
+  * prompt: "Compare the following two texts separated with character '|' and compute similarity score for them ranging from 0, as not similar at all to 1 exactly the same. Amswer with your most precise calculation but only with the number, do not need the explanation."
 * Creates a `TopicUpdate` document with:
 
   * `topic_id` referencing the topic
