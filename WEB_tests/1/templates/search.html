@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for "{{ keyword }}"</h1>
+    {% if results %}
+        {% for r in results %}
+            <div style="margin-bottom: 20px;">
+                <p><strong>Summary:</strong> {{ r['summary'] }}</p>
+                <p><strong>Score:</strong> {{ r['score'] }}</p>
+                <p><strong>Update Time:</strong> {{ r['update_time'] }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+    <p><a href="/">Back</a></p>
+</body>
+</html>

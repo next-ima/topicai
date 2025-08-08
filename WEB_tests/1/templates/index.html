@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI News Generator</title>
+</head>
+<body>
+    <h1>Generate AI News</h1>
+    <form action="/add_topic" method="post">
+        <input type="text" name="keyword" placeholder="Enter a topic keyword" required>
+        <button type="submit">Generate</button>
+    </form>
+
+    <h2>Search Topics</h2>
+    <form action="/search" method="get">
+        <input type="text" name="keyword" placeholder="Search keyword">
+        <button type="submit">Search</button>
+    </form>
+
+    <p><a href="/full_update">Trigger Full Update</a></p>
+</body>
+</html>
