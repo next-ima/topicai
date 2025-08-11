@@ -16,11 +16,10 @@ def add_topic():
     return redirect('/')
 
 @app.route('/search', methods=['GET'])
-@app.route('/search', methods=['GET'])
 def search():
-    keyword = request.args.get('keyword')
-    results = seach_by_keyword(keyword) if keyword else []
-    return render_template('search.html', keyword=keyword, results=results)
+    keywords = request.args.get('keywords')
+    results = seach_by_keyword(keywords) if keywords else []
+    return render_template('search.html', keyword=keywords, results=results)
 
 
 @app.route('/full_update')

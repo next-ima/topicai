@@ -18,7 +18,7 @@ topic_updates = db["Topic updates"]
 
 
 def new_topic(user_topic):
-    user_topics = user_topic.lower().split(",")  # Normalize and split if string input
+    user_topics = [topic.strip().lower() for topic in user_topic.split(",")]  # Normalize and split if string input
 
     # Check if the topic already exists in the database
     existing_topic = topics.find_one({"keywords": user_topics})
