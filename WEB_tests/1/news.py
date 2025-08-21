@@ -108,7 +108,7 @@ def full_update():
 
 
 # Creating a new topic with initial keywords (vvvv EXAMPLE vvvv)
-#new_topic(["nuclear weapons", "war", "Russia", "Ukraine"])
+new_topic("nuclear weapons, war, Russia, Ukraine")
 #new_topic(["Russia", "Military"])
 
 # Searching for topics by keyword (vvvv EXAMPLE vvvv)

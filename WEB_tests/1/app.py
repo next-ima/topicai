@@ -12,7 +12,7 @@ def home():
 def add_topic():
     keyword = request.form.get('keyword')
     if keyword:
-        new_topic(keyword)  # wrap in list if your function expects a list
+        new_topic(keyword)
     return redirect('/')
 
 @app.route('/search', methods=['GET'])
