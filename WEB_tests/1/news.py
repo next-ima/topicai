@@ -53,7 +53,7 @@ def new_topic(user_topic):
         "update_time": timestamp
     })
 
-def seach_by_keyword(keyword):
+def search_by_keyword(keyword):
     keyword = keyword.lower()  # Normalize the keyword to lowercase
     results = []
 
@@ -108,11 +108,11 @@ def full_update():
 
 
 # Creating a new topic with initial keywords (vvvv EXAMPLE vvvv)
-new_topic("nuclear weapons, war, Russia, Ukraine")
-#new_topic(["Russia", "Military"])
+#new_topic("nuclear weapons, war, Russia, Ukraine")
+#new_topic("Russia, Military")
 
 # Searching for topics by keyword (vvvv EXAMPLE vvvv)
-#seach_by_keyword("Russia")
+#print(search_by_keyword("Russia"))
 
 # Checking the score of a topic (vvvv EXAMPLE vvvv)
 #check_topic_score(ObjectId('6894cf7cf27c64a21c14455f'))

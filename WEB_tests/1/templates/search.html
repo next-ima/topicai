@@ -5,8 +5,8 @@
 </head>
 <body>
     <h1>Search Results for "{{ keyword }}"</h1>
-    {% if results %}
-        {% for r in results %}
+    {% if result %}
+        {% for r in result %}
             <div style="margin-bottom: 20px;">
                 <p><strong>Summary:</strong> {{ r['summary'] }}</p>
                 <p><strong>Score:</strong> {{ r['score'] }}</p>

@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect
 from bson.objectid import ObjectId
-from news import new_topic, seach_by_keyword, check_topic_score, update_using_id, full_update, topics
+from news import new_topic, search_by_keyword, check_topic_score, update_using_id, full_update, topics
 
 app = Flask(__name__)
 
@@ -10,16 +10,16 @@ def home():
 
 @app.route('/add_topic', methods=['POST'])
 def add_topic():
-    keyword = request.form.get('keyword')
+    keyword = request.form.get('keywords')
     if keyword:
         new_topic(keyword)
     return redirect('/')
 
 @app.route('/search', methods=['GET'])
 def search():
-    keywords = request.args.get('keywords')
-    results = seach_by_keyword(keywords) if keywords else []
-    return render_template('search.html', keyword=keywords, results=results)
+    keywords = request.args.get('keyword')
+    results = search_by_keyword(keywords)
+    return render_template('search.html', keyword=keywords, result=results)
 
 
 @app.route('/full_update')
