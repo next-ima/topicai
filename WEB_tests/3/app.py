@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template, redirect, jsonify
+from flask import Flask, request, render_template, redirect, jsonify, session, url_for
 from bson.objectid import ObjectId
 from news import new_topic, search_by_keyword, check_topic_score, update_using_id, full_update, topics, topic_updates, get_popular_updates
 
 app = Flask(__name__)
+app.secret_key = "super-secret"
+ADMIN_PASSWORD = "changeme"
 
 @app.route('/')
 def home():
@@ -38,13 +40,45 @@ def api_news():
     for u in updates:
         topic = topics.find_one({"_id": u["topic_id"]})
         items.append({
-            "headline": ", ".join(topic["keywords"]),
+            "id": str(u["_id"]),
+            "headline": u["name"],
             "summary": u["summary"],
             "score": u["score"],
             "time": u["update_time"]
         })
 
     return jsonify(items)
+
+@app.route('/article/<id>')
+def article(id):
+    article = topic_updates.find_one({"_id": ObjectId(id)})
+    if not article:
+        return "Article not found", 404
+    
+    topic = topics.find_one({"_id": article["topic_id"]})
+    return render_template("article.html", article=article, topic=topic)
+
+@app.route("/admin_login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        password = request.form.get("password")
+        if password == ADMIN_PASSWORD:
+            session["admin"] = True
+            return redirect(url_for("admin"))
+        else:
+            return render_template("admin_login.html", error="Invalid password")
+    return render_template("admin_login.html")
+
+@app.route("/admin")
+def admin():
+    if not session.get("admin"):
+        return redirect(url_for("admin_login"))
+    return render_template("admin.html")
+
+@app.route("/admin_logout")
+def admin_logout():
+    session.pop("admin", None)
+    return redirect(url_for("index"))
 
 if __name__ == '__main__':
     app.run(debug=True)

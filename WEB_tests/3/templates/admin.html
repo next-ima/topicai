@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+        <p><a href="{{ url_for('admin_logout') }}">Logout</a></p>
+    </header>
+
+    <main>
+        <h2>Create Topic</h2>
+        <form action="/add_topic" method="post">
+            <input type="text" name="keywords" placeholder="Enter a topic keyword" required>
+            <button type="submit">Generate</button>
+        </form>
+
+        <h2>Full Update</h2>
+        <p><a href="/full_update">Trigger Full Update</a></p>
+    </main>
+</body>
+</html>
