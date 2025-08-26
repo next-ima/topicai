@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI News Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>📰 AI News Generator</h1>
+    </header>
+
+    <main>
+        <!-- Add Topic -->
+        <form action="/add_topic" method="post" class="form-box">
+            <input type="text" name="keywords" placeholder="Enter a topic keyword" required>
+            <button type="submit">Generate</button>
+        </form>
+
+        <!-- Search -->
+        <form action="/search" method="get" class="form-box">
+            <input type="text" name="keyword" placeholder="Search keyword">
+            <button type="submit">Search</button>
+        </form>
+
+        <p class="update-link"><a href="/full_update">Trigger Full Update</a></p>
+
+        <!-- News Feed -->
+        <section id="news-feed"></section>
+    </main>
+
+    <script>
+        let page = 1;
+        const feed = document.getElementById('news-feed');
+
+        async function loadNews() {
+            const res = await fetch(`/api/news?page=${page}`);
+            const items = await res.json();
+            if (items.length === 0) return;
+
+            items.forEach(n => {
+                const div = document.createElement('div');
+                div.className = "news-card";
+                div.innerHTML = `
+                    <h2>${n.headline}</h2>
+                    <p>${n.summary}</p>
+                    <small>Score: ${n.score} | ${n.time}</small>
+                `;
+                feed.appendChild(div);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                page++;
+                loadNews();
+            }
+        });
+
+        loadNews();
+    </script>
+</body>
+</html>
