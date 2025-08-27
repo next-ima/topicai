@@ -29,7 +29,7 @@ def new_topic(user_topic):
     response = AI_client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "You are a journalist writing in a news style. Max 100 words. Make the first line a headline. Then leave an empty line and write a brief summary. After that leave another empty line and write the rest of the article."},
+            {"role": "system", "content": "You are a journalist writing in a news style. Max 500 words. Make the first line a headline. Then leave an empty line and write a brief summary. After that leave another empty line and write the rest of the article."},
             {"role": "user", "content": f"Can you tell me some news about the {user_topics}?"}
         ]
     )
@@ -54,16 +54,22 @@ def search_by_keyword(keyword):
     results = []
 
     for topic in topics.find({"keywords": keyword}):
-        updates = topic_updates.find({"topic_id": topic["_id"]})
+        updates = topic_updates.find(
+            {"topic_id": topic["_id"]}
+        ).sort("update_time", -1)  # newest → oldest
+
         for text in updates:
             results.append({
+                "id": str(text["_id"]),
                 "headline": text["name"],
                 "summary": text["summary"],
                 "text": text["text"],
                 "score": text["score"],
                 "update_time": text["update_time"]
             })
+
     return results
+
 
 def check_topic_score(topic_id):
     latest_topic_update = topic_updates.find_one({"topic_id": topic_id}, sort=[("update_time", -1)])
@@ -107,4 +113,22 @@ def get_popular_updates(skip, limit):
 # Checking the score of a topic (vvvv EXAMPLE vvvv)
 #check_topic_score(ObjectId('6894cf7cf27c64a21c14455f'))
 
-full_update()  # Full update of all topics
+#full_update()  # Full update of all topics
+
+# extra_keywords = [
+#     "ai, robotics, automation, future",
+#     "space, mars, colonization, nasa",
+#     "finance, crypto, markets, investment",
+#     "sports, olympics, football, athletes",
+#     "climate, global warming, renewable, energy",
+#     "technology, startups, ai, innovation",
+#     "health, nutrition, public health, fitness",
+#     "politics, elections, democracy, law",
+#     "science, discoveries, astronomy, research",
+#     "environment, wildlife, conservation, forests"
+# ]
+
+
+# for item in extra_keywords:
+#     new_topic(item)
+#     print(f"Added topic: {item}")

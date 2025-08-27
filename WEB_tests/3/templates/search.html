@@ -1,23 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Search Results for "{{ keyword }}"</h1>
-    {% if result %}
-        {% for r in result %}
-            <div style="margin-bottom: 20px;">
-                <p><strong>Headline:</strong> {{ r['headline'] }}</p>
-                <p><strong>Summary:</strong> {{ r['summary'] }}</p>
-                <p><strong>Text:</strong> {{ r['text'] }}</p>
-                <p><strong>Score:</strong> {{ r['score'] }}</p>
-                <p><strong>Update Time:</strong> {{ r['update_time'] }}</p>
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
-    <p><a href="/">Back</a></p>
+    <header>
+        <h1>🔍 Search Results for "{{ keyword }}"</h1>
+    </header>
+
+    <main>
+        {% if result %}
+            {% for r in result %}
+                <div class="news-card">
+                    <a href="/article/{{ r['id'] }}" style="text-decoration: none; color: inherit;">
+                        <h2>{{ r['headline'] }}</h2>
+                        <p>{{ r['summary'] }}</p>
+                        <small>Score: {{ r['score'] }} | {{ r['update_time'] }}</small>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+        <p><a href="/">← Back to News</a></p>
+    </main>
 </body>
 </html>
