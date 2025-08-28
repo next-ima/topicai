@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Search Results</title>
+    <!-- Link to CSS for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,6 +12,7 @@
     </header>
 
     <main>
+        <!-- Display search results if any -->
         {% if result %}
             {% for r in result %}
                 <div class="news-card">

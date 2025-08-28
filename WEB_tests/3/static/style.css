@@ -1,3 +1,4 @@
+/* General body styling */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     color: #222;
 }
 
+/* Header styling */
 header {
     background: #111;
     color: #fff;
@@ -12,12 +14,14 @@ header {
     text-align: center;
 }
 
+/* Main content styling */
 main {
     max-width: 700px;
     margin: auto;
     padding: 1rem;
 }
 
+/* Form box styling */
 .form-box {
     display: flex;
     margin-bottom: 1rem;
@@ -39,11 +43,13 @@ main {
     cursor: pointer;
 }
 
+/* Update link styling */
 .update-link {
     text-align: center;
     margin-bottom: 2rem;
 }
 
+/* News card styling */
 .news-card {
     background: #fff;
     padding: 1rem;

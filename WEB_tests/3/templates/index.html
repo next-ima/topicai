@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AI News Generator</title>
+    <!-- Link to CSS for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,17 +12,18 @@
     </header>
 
     <main>
-        <!-- Search -->
+        <!-- Search form for keywords -->
         <form action="/search" method="get" class="form-box">
             <input type="text" name="keyword" placeholder="Search keyword">
             <button type="submit">Search</button>
         </form>
 
-        <!-- News Feed -->
+        <!-- News Feed section (populated by JS) -->
         <section id="news-feed"></section>
     </main>
 
     <script>
+        // Infinite scroll for loading news
         let page = 1;
         const feed = document.getElementById('news-feed');
 
@@ -51,6 +53,7 @@
             }
         });
 
+        // Initial load
         loadNews();
     </script>
 </body>

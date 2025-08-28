@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ article.name }}</title>
+    <!-- Link to CSS for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -11,8 +12,9 @@
     </header>
 
     <main>
+        <!-- Display full article content -->
         <article class="news-card">
-            <p>{{ article.text }}</p>
+            <p>{{ article.text | replace('\n', '<br>') | safe }}</p>
             <small>Score: {{ article.score }} | {{ article.update_time }}</small>
         </article>
         <p><a href="/">← Back to News</a></p>
