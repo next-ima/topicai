@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <!-- Link to CSS for styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🔍 Search Results for "{{ keyword }}"</h1>
+    </header>
+
+    <main>
+        <!-- Display search results if any -->
+        {% if result %}
+            {% for r in result %}
+                <div class="news-card">
+                    <a href="/article/{{ r['id'] }}" style="text-decoration: none; color: inherit;">
+                        <h2>{{ r['headline'] }}</h2>
+                        <p>{{ r['summary'] }}</p>
+                        <small>Score: {{ r['score'] }} | {{ r['update_time'] }}</small>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+        <p><a href="/">← Back to News</a></p>
+    </main>
+</body>
+</html>

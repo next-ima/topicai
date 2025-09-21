@@ -18,7 +18,7 @@ topics = db["Topics"]
 topic_updates = db["Topic_updates"]
 
 # Create a new topic and generate a news article using OpenAI
-def new_topic(user_topic):
+def new_topic(user_topic, created_by=None):
     user_topics = [topic.strip().lower() for topic in user_topic.split(",")]
     existing_topic = topics.find_one({"keywords": user_topics})
 
@@ -63,14 +63,17 @@ def new_topic(user_topic):
         else ""
     )
 
-    topic_updates.insert_one({
+    inserted = topic_updates.insert_one({
         "topic_id": keyword_id,
         "name": headline,
         "summary": summary,
         "text": article_body,
         "score": 1,
-        "update_time": timestamp
+        "update_time": timestamp,
+        "created_by": created_by
     })
+
+    return inserted.inserted_id
 
 # Search for topics by keyword
 def search_by_keyword(keyword):
@@ -96,7 +99,6 @@ def search_by_keyword(keyword):
 
 # Get the relevance score for a topic update using OpenAI
 def check_topic_score(topic_id):
-    # Get the most recent topic update
     latest_topic_update = topic_updates.find_one({"topic_id": topic_id}, sort=[("update_time", -1)])
     response = AI_client.chat.completions.create(
         model="gpt-4",
@@ -109,7 +111,6 @@ def check_topic_score(topic_id):
     )
     score = float(response.choices[0].message.content.strip())
 
-    # Update the score in the database for this topic update
     topic_updates.update_one(
         {"_id": latest_topic_update["_id"]},
         {"$set": {"score": score}}
@@ -138,23 +139,3 @@ def full_update():
 # Get paginated topic updates for the news feed
 def get_popular_updates(skip, limit):
     return list(topic_updates.find().sort("update_time", -1).skip(skip).limit(limit))
-
-
-# Example usage (commented out)
-#new_topic("nuclear weapons, war, Russia, Ukraine")
-# new_topic("Russia, Military")
-# print(search_by_keyword("Russia"))
-# check_topic_score(ObjectId('6894cf7cf27c64a21c14455f'))
-# full_update()  # Full update of all topics
-
-# extra_keywords = [
-#     "ai, robotics, automation, future",
-#     "space, mars, colonization, nasa",
-#     "finance, crypto, markets, investment",
-#     "sports, olympics, football, athletes",
-#     "climate, global warming, renewable, energy",
-# ]
-
-# for item in extra_keywords:
-#     new_topic(item)
-#     print(f"Added topic: {item}")

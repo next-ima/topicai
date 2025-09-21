@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>{{ article.name }}</h1>
+    </header>
+
+    <main>
+        <article class="news-card">
+            <p>{{ article.text | replace('\n', '<br>') | safe }}</p>
+            <small>Score: {{ article.score }} | {{ article.update_time }}</small>
+        </article>
+        <a href="/">← Back to News</a>
+    </main>
+</body>
+</html>

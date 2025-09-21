@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .disabled-btn {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🗳 Voting Page</h1>
+        <p><a href="/">← Back to News</a> | <a href="/logout">Logout</a></p>
+    </header>
+
+    <main>
+        <h2>Create a New Topic</h2>
+        <form action="/submit_topic" method="post" class="form-box">
+            <input type="text" name="keywords" placeholder="Enter keywords" required>
+            {% if user.tokens > 0 %}
+                <button type="submit">Submit (costs 1 token)</button>
+            {% else %}
+                <button type="submit" disabled class="disabled-btn">No tokens left</button>
+            {% endif %}
+        </form>
+
+        <h2>Vote on Topics</h2>
+        {% if articles %}
+            {% for a in articles %}
+                <div class="news-card">
+                    <h2>{{ a.name }}</h2>
+                    <p>{{ a.summary }}</p>
+                    <small>Votes: {{ a.score }} | {{ a.update_time }}</small>
+                    <br>
+                    {% if user.tokens > 0 %}
+                        <a href="/vote/{{ a._id }}" class="vote-btn">Vote (costs 1 token)</a>
+                    {% else %}
+                        <button disabled class="disabled-btn">No tokens left</button>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No topics available for voting.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
