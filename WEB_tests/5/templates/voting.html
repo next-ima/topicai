@@ -4,42 +4,41 @@
     <meta charset="UTF-8">
     <title>Voting Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .disabled-btn {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-    </style>
 </head>
 <body>
+    <!-- Header styled like the rest of the site -->
     <header>
         <h1>🗳 Voting Page</h1>
         <p>Tokens remaining: {{ user.tokens }}</p>
-        <p><a href="/">← Back to News</a> | <a href="/logout">Logout</a></p>
+        <div class="header-actions">
+            <a href="/" class="action-btn">← Back to News</a>
+            <a href="/logout" class="action-btn primary">Logout</a>
+        </div>
     </header>
 
     <main>
+        <!-- Keyword submission -->
         <h2>Propose a New Keyword</h2>
         <form action="/submit_keyword" method="post" class="form-box">
             <input type="text" name="keyword" placeholder="Enter keyword" required>
             {% if user.tokens > 0 %}
-                <button type="submit">Submit (costs 1 token)</button>
+                <button type="submit" class="action-btn primary">Submit (costs 1 token)</button>
             {% else %}
-                <button type="submit" disabled class="disabled-btn">No tokens left</button>
+                <button type="submit" disabled class="action-btn disabled-btn">No tokens left</button>
             {% endif %}
         </form>
 
+        <!-- Keyword voting -->
         <h2>Vote on Keywords</h2>
         {% if keywords %}
             {% for k in keywords %}
                 <div class="news-card">
                     <h2>{{ k.keyword }}</h2>
-                    <small>Votes: {{ k.votes }}</small>
-                    <br>
+                    <small>Votes: {{ k.votes }}</small><br>
                     {% if user.tokens > 0 %}
-                        <a href="/vote_keyword/{{ k._id }}" class="vote-btn">Vote (costs 1 token)</a>
+                        <a href="/vote_keyword/{{ k._id }}" class="action-btn primary">Vote (costs 1 token)</a>
                     {% else %}
-                        <button disabled class="disabled-btn">No tokens left</button>
+                        <button disabled class="action-btn disabled-btn">No tokens left</button>
                     {% endif %}
                 </div>
             {% endfor %}

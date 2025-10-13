@@ -1,0 +1,16 @@
+content = "Culture & Society\n\nSmithsonian Institution: World's Largest Museum, Education, and Research Complex\n\nThe Smithsonian Institution stands as the world's largest museum, education, and research complex. Spanning over 19 museums and the National Zoo in the United States, it offers a prodigious collection of artifacts and exhibits that capture global history, culture, and natural phenomena.\n\nFounded in 1846 with funds from the estate of James Smithson, a British scientist, the Smithsonian Institution has grown into an unparalleled cultural repository, attracting millions of visitors from around the globe every year. Beyond its vast physical collections, the Smithsonian plays a crucial role in educational outreach and scientific research.\n\nThe Smithsonian Institution's 19 museums, galleries, gardens, and the National Zoo house over 154 million objects, displays, and specimens. Its diverse range of exhibits ranges from the National Air and Space Museum's iconic Wright Flyer to the thought-provoking displays at the National Museum of African American History and Culture. It contributes significantly to the preservation and interpretation of historical, artistic, and cultural treasures.\n\nOne of the unique aspects of the Smithsonian is its dedication to public education. It offers extensive educational programs, workshops, and digital learning resources. The organization's open access provides educators, students, and lifelong learners access to a wealth of knowledge and resources, facilitated by a team of experts and researchers.\n\nScientific research is another pillar of the institution’s operations. The Smithsonian contributes to the conservation of biodiversity through projects, including those conducted by the National Zoo and the Smithsonian Conservation Biology Institute. Additionally, the institution hosts numerous scientists and researchers who are involved in collaborative international research projects, aiming to solve pressing environmental and historical challenges.\n\nThe funding model for the Smithsonian is a mix of private and public funds, allowing it to maintain free admission to most of its museums. Its role extends beyond exhibition and preservation; it actively engages in dialogue about global issues, promotes understanding across cultures, and supports innovative technological research.\n\nLooking forward, the Smithsonian Institution continues to evolve with projects like the revitalization of its public spaces, digital initiatives to reach broader global audiences, and efforts to ensure its collections reflect the diversity and dynamism of human history.\n\n- Smithsonian Institution Archives\n- National Museum of American History Records\n- Smithsonian Annual Report"
+
+group = content.split("\n")[0]
+headline = content.split("\n")[2]
+summary = (
+    content.split("\n\n")[2]
+    if len(content.split("\n\n")) > 1
+    else ""
+)
+article_body = (
+    "\n\n".join(content.split("\n\n")[3:])
+    if len(content.split("\n\n")) > 2
+    else ""
+)
+
+print(article_body)

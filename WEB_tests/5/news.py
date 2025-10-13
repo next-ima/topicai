@@ -54,7 +54,9 @@ def new_topic(user_topic, created_by=None):
                 "role": "system",
                 "content": (
                     "You are a journalist writing in a news style. Max 500 words. "
-                    "Make the first line a headline. Then leave an empty line and write a brief summary. "
+                    "Make the first lane only one word that will categorise the article into one of these 6 groups:"
+                    "[Politics_Conflicts, Economy_Business, Science_Technology, Environment_Climate, Sports, Culture_Society]"
+                    "After that leave a empty line and make the next line a headline. Then leave an empty line and write a brief summary. "
                     "After that leave another empty line and write the rest of the article and leave two empty lines at the end. "
                     "After that list the sources. Each source in next line starting with a dash. Do not include any URLs."
                 )
@@ -67,21 +69,22 @@ def new_topic(user_topic, created_by=None):
     )
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-    headline = response.choices[0].message.content.split("\n")[0]
+    group = response.choices[0].message.content.split("\n")[0]
+    headline = response.choices[0].message.content.split("\n")[2]
     summary = (
-        response.choices[0].message.content.split("\n\n")[1]
+        response.choices[0].message.content.split("\n\n")[2]
         if len(response.choices[0].message.content.split("\n\n")) > 1
         else ""
     )
     article_body = (
-        "\n\n".join(response.choices[0].message.content.split("\n\n")[2:])
+        "\n\n".join(response.choices[0].message.content.split("\n\n")[3:])
         if len(response.choices[0].message.content.split("\n\n")) > 2
         else ""
     )
 
     inserted = topic_updates.insert_one({
         "topic_id": keyword_id,
+        "group": group,
         "name": headline,
         "summary": summary,
         "text": article_body,
@@ -106,7 +109,6 @@ def search_by_keyword(keyword):
                 "headline": text["name"],
                 "summary": text["summary"],
                 "text": text["text"],
-                "score": text["score"],
                 "update_time": text["update_time"]
             })
     return results

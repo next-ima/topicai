@@ -13,9 +13,9 @@
     <main>
         <article class="news-card">
             <p>{{ article.text | replace('\n', '<br>') | safe }}</p>
-            <small>Score: {{ article.score }} | {{ article.update_time }}</small>
+            <small>{{ article.update_time }}</small>
         </article>
-        <a href="/">← Back to News</a>
+        <a href="/" class="action-btn">Back to News</a>
     </main>
 </body>
 </html>

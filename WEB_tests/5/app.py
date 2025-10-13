@@ -28,7 +28,7 @@ ADMIN_PASSWORD = "changeme"
 # --- Home ---
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', selected_group="Home")
 
 # --- Search ---
 @app.route('/search', methods=['GET'])
@@ -43,16 +43,23 @@ def api_news():
     page = int(request.args.get("page", 1))
     per_page = 10
     skip = (page - 1) * per_page
-    updates = get_popular_updates(skip, per_page)
+    group = request.args.get("group", "Home")
+
+    if group == "Home":
+        updates = get_popular_updates(skip, per_page)
+    else:
+        updates = list(topic_updates.find({"group": group}).sort("update_time", -1).skip(skip).limit(per_page))
+
+
     items = []
     for u in updates:
         items.append({
             "id": str(u["_id"]),
             "headline": u["name"],
             "summary": u["summary"],
-            "score": u["score"],
             "time": u["update_time"]
         })
+
     return jsonify(items)
 
 # --- Article detail ---
@@ -64,14 +71,19 @@ def article(id):
     topic = topics.find_one({"_id": article["topic_id"]})
     return render_template("article.html", article=article, topic=topic)
 
+# --- Filter by group ---
+@app.route('/filter/<group>')
+def filter_news(group):
+    return render_template('index.html', selected_group=group)
+
 # --- User auth ---
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         username = request.form["username"]
-        password = generate_password_hash(request.form["password"])
         if get_user(username):
             return render_template("register.html", error="User already exists")
+        password = generate_password_hash(request.form["password"])
         create_user(username, password)
         return redirect(url_for("login"))
     return render_template("register.html")
@@ -132,5 +144,12 @@ def weekly_winners():
     clear_voting()
     return redirect(url_for("voting"))
 
+# --- Topics update ---
+@app.route("/update")
+def update():
+    full_update()
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
