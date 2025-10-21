@@ -1,0 +1,159 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #fafafa;
+    color: #222;
+}
+
+/* Header styling */
+header {
+    background: #111;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Main content styling */
+main {
+    max-width: 700px;
+    margin: auto;
+    padding: 1rem;
+}
+
+/* Form box styling */
+.form-box {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.form-box input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px 0 0 8px;
+}
+
+.form-box button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: #111;
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+/* Update link styling */
+.update-link {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* News card styling */
+.news-card {
+    background: #fff;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.toolbox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #222;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0.5rem 1rem;
+}
+
+/* Three-column layout for perfect centering */
+.toolbox-left,
+.toolbox-right {
+    display: flex;
+    gap: 0.5rem;
+    width: 180px; /* ensures equal space on both sides */
+    justify-content: flex-end;
+}
+
+.toolbox-center {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+/* Toolbox buttons */
+.toolbox-btn {
+    color: #fff;
+    background: #333;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+}
+.toolbox-btn:hover { background: #555; }
+.toolbox-btn.active { background: #0078ff; }
+
+/* Action buttons (Login, Register, etc.) */
+/* ===== UNIVERSAL BUTTONS ===== */
+
+/* Matches the toolbox look */
+.action-btn {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s ease;
+    cursor: pointer;
+}
+
+.action-btn:hover {
+    background: #555;
+}
+
+.action-btn.primary {
+    background: #0078ff;
+}
+
+.action-btn.primary:hover {
+    background: #339cff;
+}
+
+.action-btn.disabled-btn,
+.action-btn:disabled {
+    background: #555;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+/* Header actions (Back / Logout) */
+.header-actions {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* ===== FORM BUTTON ===== */
+.form-box button {
+    border: none;
+    border-radius: 0 8px 8px 0;
+    background: #0078ff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.form-box button:hover:not(.disabled-btn) {
+    background: #339cff;
+}

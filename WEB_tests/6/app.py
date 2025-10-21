@@ -19,6 +19,11 @@ from users import (
     use_token,
     reset_all_tokens
 )
+from security import (
+    validate_topic_list,
+    validate_keyword,
+    safe_object_id
+)
 
 app = Flask(__name__)
 app.secret_key = "super-secret"
@@ -34,9 +39,13 @@ def home():
 # --- Search ---
 @app.route('/search', methods=['GET'])
 def search():
-    keywords = request.args.get('keyword')
-    results = search_by_keyword(keywords)
-    return render_template('search.html', keyword=keywords, result=results)
+    keywords = request.args.get('keyword', '')
+    try:
+        validated = validate_keyword(keywords)
+    except ValueError:
+        return render_template('search.html', keyword=keywords, result=[], error="Invalid search term")
+    results = search_by_keyword(validated)
+    return render_template('search.html', keyword=validated, result=results)
 
 
 # --- API feed ---
@@ -67,7 +76,12 @@ def api_news():
 # --- Article detail ---
 @app.route('/article/<id>')
 def article(id):
-    article = topic_updates.find_one({"_id": ObjectId(id)})
+    try:
+        oid = safe_object_id(id)
+    except ValueError:
+        return "Invalid article id", 400
+
+    article = topic_updates.find_one({"_id": oid})
     if not article:
         return "Article not found", 404
     topic = topics.find_one({"_id": article["topic_id"]})
@@ -127,10 +141,16 @@ def voting():
 def submit_keyword():
     if "username" not in session:
         return redirect(url_for("login"))
-    keyword = request.form.get("keyword")
-    if keyword and use_token(session["username"]):
-        add_voting_keyword(keyword, session["username"])
+    keyword = request.form.get("keyword", "")
+    try:
+        validated_kw = validate_keyword(keyword)
+    except ValueError:
+        return "Invalid keyword", 400
+
+    if validated_kw and use_token(session["username"]):
+        add_voting_keyword(validated_kw, session["username"])
         return redirect(url_for("voting"))
+
     return "Not enough tokens"
 
 
@@ -149,9 +169,15 @@ def vote_keyword_route(id):
 def weekly_winners():
     top_keywords = get_voting_keywords()[:5]
     for k in top_keywords:
-        new_topic(k["keyword"], created_by=k["created_by"])
+        try:
+            toks = validate_topic_list(k["keyword"])
+        except ValueError:
+            continue
+        new_topic(",".join(toks), created_by=k["created_by"])
+
     reset_all_tokens()
     clear_voting()
+
     return redirect(url_for("voting"))
 
 

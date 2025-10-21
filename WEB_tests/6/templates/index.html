@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI News Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>📰 AI News Generator</h1>
+    </header>
+
+        <div class="toolbox">
+            <div class="toolbox-left"></div> <!-- balances the layout -->
+
+                <div class="toolbox-center">
+                    <a href="{{ url_for('filter_news', group='Home') }}" class="toolbox-btn {% if selected_group == 'Home' %}active{% endif %}">Home</a>
+                    <a href="{{ url_for('filter_news', group='Politics_Conflicts') }}" class="toolbox-btn {% if selected_group == 'Politics_Conflicts' %}active{% endif %}">Politics & Conflicts</a>
+                    <a href="{{ url_for('filter_news', group='Economy_Business') }}" class="toolbox-btn {% if selected_group == 'Economy_Business' %}active{% endif %}">Economy & Business</a>
+                    <a href="{{ url_for('filter_news', group='Science_Technology') }}" class="toolbox-btn {% if selected_group == 'Science_Technology' %}active{% endif %}">Science & Technology</a>
+                    <a href="{{ url_for('filter_news', group='Environment_Climate') }}" class="toolbox-btn {% if selected_group == 'Environment_Climate' %}active{% endif %}">Environment & Climate</a>
+                    <a href="{{ url_for('filter_news', group='Sports') }}" class="toolbox-btn {% if selected_group == 'Sports' %}active{% endif %}">Sports</a>
+                    <a href="{{ url_for('filter_news', group='Culture_Society') }}" class="toolbox-btn {% if selected_group == 'Culture_Society' %}active{% endif %}">Culture & Society</a>
+                </div>
+
+
+            <div class="toolbox-right">
+                {% if session.username %}
+                <a href="/voting" class="action-btn">Voting</a>
+                <a href="/logout" class="action-btn primary">Logout</a>
+                {% else %}
+                <a href="/login" class="action-btn">Login</a>
+                <a href="/register" class="action-btn primary">Register</a>
+                {% endif %}
+            </div>
+        </div>
+
+
+    <main>
+        <form action="/search" method="get" class="form-box">
+            <input type="text" name="keyword" placeholder="Search keyword">
+            <button type="submit">Search</button>
+        </form>
+
+        <section id="news-feed"></section>
+    </main>
+
+    <!-- ✅ UPDATED SCRIPT -->
+    <script>
+        let page = 1;
+        let loading = false;
+        const feed = document.getElementById('news-feed');
+
+        // ✅ Use the currently selected group from Flask
+        const group = "{{ selected_group }}";
+
+        async function loadNews() {
+            if (loading) return;
+            loading = true;
+
+            // ✅ Request includes group (Home or selected category)
+            const res = await fetch(`/api/news?page=${page}&group=${encodeURIComponent(group)}`);
+            const items = await res.json();
+
+            if (items.length === 0) return;
+
+            items.forEach(n => {
+                const div = document.createElement('div');
+                div.className = "news-card";
+                div.innerHTML = `
+                    <a href="/article/${n.id}" style="text-decoration: none; color: inherit;">
+                        <h2>${n.headline}</h2>
+                        <p>${n.summary}</p>
+                        <!-- ✅ Removed score, show only time -->
+                        <small>${n.time}</small>
+                    </a>
+                `;
+                feed.appendChild(div);
+            });
+
+            // ✅ Prepare for next load
+            page++;
+            loading = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+                loadNews();
+            }
+        });
+
+        // ✅ Initial load
+        loadNews();
+    </script>
+</body>
+</html>
